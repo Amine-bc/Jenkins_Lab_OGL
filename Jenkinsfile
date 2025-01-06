@@ -27,7 +27,7 @@ pipeline {
         stage('Code Quality') {
              steps {
                  script {
-//                     def qualityGate = waitForQualityGate()
+       def qualityGate = waitForQualityGate()
 
                  }
              }
