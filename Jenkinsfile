@@ -57,7 +57,7 @@ pipeline {
     success {
                       // Email Notification for Successful Deployment
                       mail(
-                          to: 'lm_bouchoucha@gmail.com',
+                          to: 'lm_bouchoucha@esi.com',
                           subject: 'Deployment Success - Project Bouchoucha-ci-cd',
                           body: 'The deployment for the project Bouchoucha-ci-cd was successful.'
                       )
@@ -73,7 +73,7 @@ pipeline {
                   failure {
                       // Email Notification for Pipeline Failure
                       mail(
-                          to: 'faresBouchoucha@gmail.com',
+                          to: 'lm_bouchoucha@esi.com',
                           subject: 'Pipeline Failed - Project Bouchoucha-ci-cd',
                           body: 'The Jenkins pipeline for project Bouchoucha-ci-cd has failed. Please check the logs for more details.'
                       )
