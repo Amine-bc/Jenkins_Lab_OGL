@@ -24,14 +24,14 @@ pipeline {
             }
         }
 
-//         stage('Code Quality') {
-//              steps {
-//                  script {
+        stage('Code Quality') {
+             steps {
+                 script {
 //                     def qualityGate = waitForQualityGate()
-//
-//                  }
-//              }
-//          }
+
+                 }
+             }
+         }
          stage('Build') {
              steps {
                  script {
