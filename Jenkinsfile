@@ -27,7 +27,9 @@ pipeline {
         stage('Code Quality') {
              steps {
                  script {
+                 withSonarQubeEnv('sonar') {
                      def qualityGate = waitForQualityGate()
+                 }
                  }
              }
          }
