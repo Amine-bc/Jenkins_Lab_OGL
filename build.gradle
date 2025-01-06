@@ -16,6 +16,7 @@ plugins {
     id("de.zebrajaeger.sendMail") version "0.1.1"
 }
 
+
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 
@@ -41,6 +42,8 @@ dependencies {
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
     finalizedBy 'sonar'
+    systemProperty "cucumber.plugin", "json:build/reports/cucumber/cucumber.json"
+
 }
 
 jacocoTestReport {
@@ -56,7 +59,7 @@ sonar {
     properties {
         property "sonar.login", "squ_645ce010d83dce6b6736fba0a35bc11758068aad"
         property "sonar.projectKey", "myProjectKey"
-        property "sonar.host.url", "172.22.0.3:9000/"
+        property "sonar.host.url", "http://sonarqube:9000/"
     }
 }
 
