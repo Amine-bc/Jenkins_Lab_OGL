@@ -63,11 +63,11 @@ sonar {
 publishing {
     repositories {
         maven {
-            url myMavenRepoWriteUrl
+            url MavenUrl
 
             credentials {
-                username myMavenRepoWriteUsername
-                password myMavenRepoWritePassword
+                username MavenUsername
+                password MavenPassword
             }
         }
     }
