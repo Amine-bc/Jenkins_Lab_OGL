@@ -27,9 +27,10 @@ pipeline {
         stage('Code Quality') {
              steps {
                  script {
-                 withSonarQubeEnv('sonar') {
                      def qualityGate = waitForQualityGate()
-                 }
+                    if (qualityGate.status != 'OK') {
+                       error "Pipeline failed due to Quality Gate failure: ${qualityGate.status}"
+               }
                  }
              }
          }
