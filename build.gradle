@@ -9,19 +9,19 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'maven-publish'
     id("com.github.spacialcircumstances.gradle-cucumber-reporting") version "0.1.25"
     id 'jacoco'
     id("org.sonarqube") version "4.4.0.3356"
-    id 'maven-publish'
-
+    id("de.zebrajaeger.sendMail") version "0.1.1"
 }
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
-group = 'com.example'
-version = '1.0-SNAPSHOT'
-
 
 cucumberReports {
     outputDir = file('build/reports/cucumber')
@@ -30,23 +30,21 @@ cucumberReports {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+//    testImplementation platform('org.junit:junit-bom:5.10.0')
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'io.cucumber:cucumber-java:6.0.0'
     testImplementation 'io.cucumber:cucumber-junit:6.0.0'
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
     implementation 'com.sun.mail:javax.mail:1.6.2'
-
 }
 
 test {
-    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport // report is always generated after tests run
     finalizedBy 'sonar'
 }
 
 jacocoTestReport {
-    dependsOn test
+    dependsOn test // tests are required to run before generating the report
     reports {
         xml.required = false
         csv.required = false
@@ -57,7 +55,7 @@ jacocoTestReport {
 sonar {
     properties {
         property "sonar.login", "squ_645ce010d83dce6b6736fba0a35bc11758068aad"
-        property "sonar.projectKey", "TP_OGL_Jenkins"
+        property "sonar.projectKey", "myProjectKey"
         property "sonar.host.url", "http://localhost:9001"
     }
 }
@@ -69,11 +67,11 @@ javadoc {
 publishing {
     repositories {
         maven {
-            url "https://mymavenrepo.com/repo/vl5BUEJf7IpuxkRtNhwD/"
+            url myMavenRepoWriteUrl
 
             credentials {
-                username "myMavenRepo"
-                password "test"
+                username myMavenRepoWriteUsername
+                password myMavenRepoWritePassword
             }
         }
     }
@@ -81,21 +79,14 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-        }
-    }
-}
 
-publish {
-    doLast {
-        notifySlack("Publish successful for project ${project.name}, version ${project.version}!")
-        notifyTeamByEmail("Publish successful for project ${project.name}, version ${project.version}")
+        }
     }
 }
 
 // Define the notification function
 def notifySlack(String message) {
-    def webhookUrl = "https://hooks.slack.com/services/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"
-    //TODO: change slack
+    def webhookUrl = "https://hooks.slack.com/services/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"
 
     def payload = [text: message]
     def jsonPayload = new groovy.json.JsonBuilder(payload).toString()
@@ -115,6 +106,7 @@ def notifySlack(String message) {
     }
 }
 
+
 def notifyTeamByEmail(String messageText) {
     def props = new Properties()
     props.put("mail.smtp.auth", "true")
@@ -123,10 +115,9 @@ def notifyTeamByEmail(String messageText) {
     props.put("mail.smtp.port", "587")
 
     // Credentials (replace with your actual details)
-    def username = "Lm_bouchoucha@esi.dz"
-    def password = "ehxe ktou ztoa gvxu"
+    def username = "la_kasmi@esi.dz"
+    def password = "qrxc khvv hzqh entp"
 
-//TODO: Change creds
     // Create session with authentication
     def session = javax.mail.Session.getInstance(props,
             new javax.mail.Authenticator() {
@@ -135,13 +126,14 @@ def notifyTeamByEmail(String messageText) {
                 }
             }
     )
+
     try {
         // Create message using fully qualified class names
         def message = new javax.mail.internet.MimeMessage(session)
         message.setFrom(new javax.mail.internet.InternetAddress(username))
 
         // Add recipients
-        def recipients = ["lm_bouchoucha@esi.dz", "amiine.bc@gmail.com"]
+        def recipients = ["lm_bouchoucha@esi.dz"]
         recipients.each { recipient ->
             message.addRecipient(
                     javax.mail.Message.RecipientType.TO,
@@ -162,6 +154,14 @@ def notifyTeamByEmail(String messageText) {
         e.printStackTrace()
     }
 }
+
+publish {
+    doLast {
+        notifySlack("Publish successful for project ${project.name}, version ${project.version}!")
+        notifyTeamByEmail("Publish successful for project ${project.name}, version ${project.version}")
+    }
+}
+
 task buildAndPublish {
     group = "Build"
     description = "Runs build, tests, and publishes the project."
