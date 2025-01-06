@@ -42,8 +42,6 @@ dependencies {
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
     finalizedBy 'sonar'
-    systemProperty "cucumber.plugin", "json:build/reports/cucumber/cucumber.json"
-
 }
 
 jacocoTestReport {
