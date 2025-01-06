@@ -60,10 +60,6 @@ sonar {
     }
 }
 
-javadoc {
-    destinationDir = file("${buildDir}/docs/javadoc")
-}
-
 publishing {
     repositories {
         maven {
@@ -84,83 +80,8 @@ publishing {
     }
 }
 
-// Define the notification function
-def notifySlack(String message) {
-    def webhookUrl = "https://hooks.slack.com/services/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"
-
-    def payload = [text: message]
-    def jsonPayload = new groovy.json.JsonBuilder(payload).toString()
-
-    def url = new URL(webhookUrl)
-    def connection = url.openConnection()
-    connection.requestMethod = "POST"
-    connection.doOutput = true
-    connection.setRequestProperty("Content-Type", "application/json")
-
-    connection.outputStream.withWriter("UTF-8") { writer ->
-        writer.write(jsonPayload)
-    }
-
-    if (connection.responseCode != 200) {
-        throw new GradleException("Failed to send Slack notification: ${connection.responseCode} ${connection.responseMessage}")
-    }
-}
 
 
-def notifyTeamByEmail(String messageText) {
-    def props = new Properties()
-    props.put("mail.smtp.auth", "true")
-    props.put("mail.smtp.starttls.enable", "true")
-    props.put("mail.smtp.host", "smtp.gmail.com")
-    props.put("mail.smtp.port", "587")
-
-    // Credentials (replace with your actual details)
-    def username = "la_kasmi@esi.dz"
-    def password = "qrxc khvv hzqh entp"
-
-    // Create session with authentication
-    def session = javax.mail.Session.getInstance(props,
-            new javax.mail.Authenticator() {
-                protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                    return new javax.mail.PasswordAuthentication(username, password)
-                }
-            }
-    )
-
-    try {
-        // Create message using fully qualified class names
-        def message = new javax.mail.internet.MimeMessage(session)
-        message.setFrom(new javax.mail.internet.InternetAddress(username))
-
-        // Add recipients
-        def recipients = ["lm_bouchoucha@esi.dz"]
-        recipients.each { recipient ->
-            message.addRecipient(
-                    javax.mail.Message.RecipientType.TO,
-                    new javax.mail.internet.InternetAddress(recipient)
-            )
-        }
-
-        // Set email details
-        message.setSubject("Deployment Notification - ${project.name}")
-        message.setText(messageText)
-
-        // Send email
-        javax.mail.Transport.send(message)
-
-        println "Email notification sent successfully"
-    } catch (Exception e) {
-        println "Failed to send email: ${e.getMessage()}"
-        e.printStackTrace()
-    }
-}
-
-publish {
-    doLast {
-        notifySlack("Publish successful for project ${project.name}, version ${project.version}!")
-        notifyTeamByEmail("Publish successful for project ${project.name}, version ${project.version}")
-    }
-}
 
 task buildAndPublish {
     group = "Build"
