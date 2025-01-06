@@ -70,7 +70,7 @@ sonar {
 publishing {
     repositories {
         maven {
-            url 'https://mymavenrepo.com/repo/acqG4i4HkeAsRkckrpL6/'
+            url 'https://mymavenrepo.com/repo/vl5BUEJf7IpuxkRtNhwD/'
 
 
             credentials {
