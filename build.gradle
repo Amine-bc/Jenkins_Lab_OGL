@@ -59,10 +59,11 @@ sonar {
     properties {
         property "sonar.login", "squ_645ce010d83dce6b6736fba0a35bc11758068aad"
         property "sonar.projectKey", "myProjectKey"
-        property "sonar.host.url", "http://localhost:9000/"
+        property "sonar.host.url", "http://sonarqube:9000/"
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
+
     }
 }
 
