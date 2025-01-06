@@ -56,7 +56,7 @@ sonar {
     properties {
         property "sonar.login", "squ_645ce010d83dce6b6736fba0a35bc11758068aad"
         property "sonar.projectKey", "myProjectKey"
-        property "sonar.host.url", "http://localhost:9001"
+        property "sonar.host.url", "http://sonarqube:9000"
     }
 }
 
