@@ -27,7 +27,7 @@ pipeline {
         stage('Code Quality') {
              steps {
                  script {
-                waitForQualityGate
+                waitForQualityGate abortPipeline: true
                  }
              }
          }
